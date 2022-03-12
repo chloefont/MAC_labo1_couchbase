@@ -1,0 +1,66 @@
+-------------------------------------------------------------------------------
+Test set: QueryOutputFormatTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 4, Errors: 2, Skipped: 0, Time elapsed: 9.478 s <<< FAILURE! - in QueryOutputFormatTest
+QueryOutputFormatTest.testPlentifulDirectorsQuery  Time elapsed: 1.02 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting ArrayList:
+  ["nb_movies", "director"]
+to contain only:
+  ["director_name", "count_film"]
+element(s) not found:
+  ["director_name", "count_film"]
+and element(s) not expected:
+  ["nb_movies", "director"]
+
+	at QueryOutputFormatTest.testPlentifulDirectorsQuery(QueryOutputFormatTest.java:99)
+
+QueryOutputFormatTest.testBestMoviesOfActorQuery  Time elapsed: 0.644 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting ArrayList:
+  ["cast", "rating", "id"]
+to contain only:
+  ["imdb_id", "rating", "cast"]
+element(s) not found:
+  ["imdb_id"]
+and element(s) not expected:
+  ["id"]
+
+	at QueryOutputFormatTest.testBestMoviesOfActorQuery(QueryOutputFormatTest.java:90)
+
+QueryOutputFormatTest.testHiddenGemQuery  Time elapsed: 0.518 s  <<< ERROR!
+com.couchbase.client.core.error.DecodingFailureException: Deserialization of content into target class com.couchbase.client.java.json.JsonObject failed; encoded = "Short Term 12"
+	at QueryOutputFormatTest.testHiddenGemQuery(QueryOutputFormatTest.java:70)
+Caused by: java.io.IOException: Expected START_OBJECT but got VALUE_STRING
+	at QueryOutputFormatTest.testHiddenGemQuery(QueryOutputFormatTest.java:70)
+
+QueryOutputFormatTest.testNightMoviesQuery  Time elapsed: 1.911 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting ArrayList:
+  ["title"]
+to contain only:
+  ["movie_id", "title"]
+but could not find the following element(s):
+  ["movie_id"]
+
+	at QueryOutputFormatTest.testNightMoviesQuery(QueryOutputFormatTest.java:142)
+
+QueryOutputFormatTest.testCommentsOfDirector1Query  Time elapsed: 0.115 s  <<< ERROR!
+com.couchbase.client.core.error.ParsingFailureException: Parsing of the input failed {"completed":true,"coreId":"0xaaf414950000000a","errors":[{"code":3000,"message":"Ambiguous reference to field comments."}],"idempotent":false,"lastDispatchedFrom":"127.0.0.1:52276","lastDispatchedTo":"127.0.0.1:8093","requestId":21,"requestType":"QueryRequest","retried":3,"retryReasons":["GLOBAL_CONFIG_LOAD_IN_PROGRESS"],"service":{"operationId":"f0b4876e-39ec-4563-a3e7-3111ec408777","statement":"SELECT comments.text\nFROM `mflix-sample`._default.commentsINNER JOIN `mflix-sample`._default.movies\nON comments.movie_id = movies._id\nWHERE \"Woody Allen\" IN movies.directors;","type":"query"},"timeoutMs":75000,"timings":{"dispatchMicros":3630,"totalDispatchMicros":3630,"totalMicros":56876}}
+	at QueryOutputFormatTest.testCommentsOfDirector1Query(QueryOutputFormatTest.java:115)
+
+QueryOutputFormatTest.testCommentsOfDirector2Query  Time elapsed: 1.465 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting ArrayList:
+  ["text"]
+to contain only:
+  ["movie_id", "text"]
+but could not find the following element(s):
+  ["movie_id"]
+
+	at QueryOutputFormatTest.testCommentsOfDirector2Query(QueryOutputFormatTest.java:128)
+
