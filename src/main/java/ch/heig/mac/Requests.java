@@ -105,8 +105,8 @@ public class Requests {
 
     public List<JsonObject> commentsOfDirector1(String director) { // marche pas
         QueryResult result = cluster.query(
-            "SELECT comments.text\n" +
-            "FROM `mflix-sample`._default.comments" +
+            "SELECT comments.movie_id, comments.text\n" +
+            "FROM `mflix-sample`._default.comments\n" +
                 "INNER JOIN `mflix-sample`._default.movies\n" + 
                     "ON comments.movie_id = movies._id\n" +
             "WHERE \"" + director + "\" IN movies.directors;"
@@ -119,7 +119,7 @@ public class Requests {
 
     public List<JsonObject> commentsOfDirector2(String director) { // marche pas
         QueryResult result = cluster.query(
-            "SELECT comments.text\n" +
+            "SELECT comments.movie_id, comments.text\n" +
             "FROM `mflix-sample`._default.comments\n" +
             "WHERE comments.movie_id IN (\n" +
                 "SELECT DISTINCT RAW movies._id\n" +
