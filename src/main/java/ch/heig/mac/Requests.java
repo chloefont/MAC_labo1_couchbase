@@ -4,6 +4,7 @@ import java.util.List;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.java.query.QueryOptions;
 
 
 public class Requests {
@@ -19,6 +20,7 @@ public class Requests {
                         "FROM system:keyspaces r\n" +
                         "WHERE r.`bucket` = \"mflix-sample\";"
         );
+        
         return result.rowsAs(String.class);
     }
 
@@ -55,14 +57,13 @@ public class Requests {
         return result.rowsAs(JsonObject.class);
     }
 
-    public List<String> greatReviewers() { // pas de test ?
+    public List<String> greatReviewers() {
         QueryResult result = cluster.query(
             "SELECT RAW comments.name\n" +
             "FROM `mflix-sample`._default.comments\n" +
             "GROUP BY comments.name\n" +
             "HAVING COUNT(comments.name) > 300"
         );
-        
 
         return result.rowsAs(String.class);
     }
@@ -98,12 +99,10 @@ public class Requests {
             "WHERE ARRAY_LENGTH(movies.directors) > 20"
         );
 
-        //throw new UnsupportedOperationException();
-
         return result.rowsAs(JsonObject.class);
     }
 
-    public List<JsonObject> commentsOfDirector1(String director) { // marche pas
+    public List<JsonObject> commentsOfDirector1(String director) {
         QueryResult result = cluster.query(
             "SELECT comments.movie_id, comments.text\n" +
             "FROM `mflix-sample`._default.comments\n" +
@@ -112,12 +111,10 @@ public class Requests {
             "WHERE \"" + director + "\" IN movies.directors;"
         );
 
-        // throw new UnsupportedOperationException();
-
         return result.rowsAs(JsonObject.class);
     }
 
-    public List<JsonObject> commentsOfDirector2(String director) { // marche pas
+    public List<JsonObject> commentsOfDirector2(String director) {
         QueryResult result = cluster.query(
             "SELECT comments.movie_id, comments.text\n" +
             "FROM `mflix-sample`._default.comments\n" +
@@ -136,9 +133,9 @@ public class Requests {
             "UPDATE `mflix-sample`._default.theaters AS theaters\n" + 
             "SET theaters.schedule = ARRAY s FOR s IN theaters.schedule\n" + 
             "WHEN s.hourBegin >= \"18:00\" OR s.movieId != \"" + movieId +"\" END;"
-        );
+        , QueryOptions.queryOptions().metrics(true));
 
-        return 0; // TODO
+        return result.metaData().metrics().get().mutationCount();
     }
 
     public List<JsonObject> nightMovies() {
