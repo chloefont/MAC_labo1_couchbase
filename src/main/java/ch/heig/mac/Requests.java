@@ -20,7 +20,7 @@ public class Requests {
                         "FROM system:keyspaces r\n" +
                         "WHERE r.`bucket` = \"mflix-sample\";"
         );
-        
+
         return result.rowsAs(String.class);
     }
 
@@ -62,7 +62,7 @@ public class Requests {
             "SELECT RAW comments.name\n" +
             "FROM `mflix-sample`._default.comments\n" +
             "GROUP BY comments.name\n" +
-            "HAVING COUNT(comments.name) > 300"
+            "HAVING COUNT(comments.name) > 300;"
         );
 
         return result.rowsAs(String.class);
@@ -96,7 +96,7 @@ public class Requests {
         QueryResult result = cluster.query(
             "SELECT movies._id as movie_id, movies.title\n" + 
             "FROM `mflix-sample`._default.movies\n" +
-            "WHERE ARRAY_LENGTH(movies.directors) > 20"
+            "WHERE ARRAY_LENGTH(movies.directors) > 20;"
         );
 
         return result.rowsAs(JsonObject.class);
@@ -105,8 +105,8 @@ public class Requests {
     public List<JsonObject> commentsOfDirector1(String director) {
         QueryResult result = cluster.query(
             "SELECT comments.movie_id, comments.text\n" +
-            "FROM `mflix-sample`._default.comments\n" +
-                "INNER JOIN `mflix-sample`._default.movies\n" + 
+            "FROM `mflix-sample`._default.movies\n" +
+                "INNER JOIN `mflix-sample`._default.comments\n" + 
                     "ON comments.movie_id = movies._id\n" +
             "WHERE \"" + director + "\" IN movies.directors;"
         );
